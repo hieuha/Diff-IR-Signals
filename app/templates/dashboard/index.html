@@ -15,7 +15,20 @@
         });
 
         $(".delete").click(function(event) {
-            console.log($(this).attr("url"));
+            var self = $(this);
+            var url = $(self).attr("url").trim();
+            $.ajax(url, {
+                method: "GET",
+                success: function(data, status) {
+                    if(data["status"] == true) {
+                        table.row($(self).closest("tr")).remove();
+                        table.draw();
+                    }
+                    else {
+                        alert("delete fail! " + data["message"]);
+                    }
+                }
+            });
         });
 
     });
