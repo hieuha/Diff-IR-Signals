@@ -1,0 +1,129 @@
+{% extends "layouts/home.html" %}
+{% block css%}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css"/>
+{% endblock %}
+{% block javascript %}
+    <style>
+        #table_signal .highlight {
+            background-color: #ffff00;
+        }
+        #table_signal tbody div, #table_signal tbody span {
+            width:auto;
+            float:left;
+        }
+        #table_signal tbody tr > td {
+            white-space: nowrap;
+        }
+        div.clear-button {
+            float: left;
+            width: auto;
+        }
+    </style>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        var table = $('#table_signal').DataTable({
+            scrollY:        '60vh',
+            scrollX:        true,
+            scrollCollapse: true,
+            paging:         false,
+            processing:     true,
+            ajax: "{{ json_url }}",
+            dom: "<'clear-button'>frtip",
+            columns: [
+                {% for name in headers %}
+                    {
+                        "data": "{{ name }}"
+                    },
+                {% endfor %}
+            ]
+        });
+
+        $("div.clear-button").append("<button class='btn btn-success'>Clear</button>");
+        $("div.clear-button").on("click", function() {
+            clear();
+            $("#table_signal tbody").find("tr.selected").toggleClass("selected");
+        });
+
+        $('#table_signal tbody').on('click', 'tr', function () {
+            $(this).toggleClass('selected');
+            clear();
+            show_diff($("#table_signal tbody").find("tr.selected"));
+        });
+
+        var show_diff = function(arr) {
+            if(arr.length < 2) {
+                return;
+            }
+
+            var diff = [];
+
+            for(var i = 1, len_tds = arr[0].cells.length; i < len_tds; i++) {
+                diff = [];
+                var same_len = true;
+                for(var index = 0, len = arr.length - 1; index < len; index++) {
+                    var td1_val = $(arr[index].cells[i]).text().trim();
+                    var td2_val = $(arr[index+1].cells[i]).text().trim();
+
+                    if(td1_val.length != td2_val.length) {
+                        same_len = false;
+                        break;
+                    }
+                    else {
+                        for(var index_char = 0; index_char < td1_val.length; index_char++) {
+                            if(td1_val[index_char] != td2_val[index_char]) {
+                                diff.push(index_char);
+                            }
+                        }
+                    }
+                }
+
+                if(same_len == false) {
+                    for(var index = 0, len = arr.length; index < len; index++) {
+                        $(arr[index].cells[i]).toggleClass("highlight");
+                    }
+                }
+                else if(diff.length > 0) {
+                    for(var index = 0, len = arr.length; index < len; index++) {
+                        var str = "";
+                        var td_val = $(arr[index].cells[i]).text().trim();
+                        for(var index_char = 0; index_char < td_val.length; index_char++) {
+                            if($.inArray(index_char, diff) != -1) {
+                                str += "<span class='highlight'>" + td_val[index_char] + "</span>";
+                            }
+                            else {
+                                str += "<span>" + td_val[index_char] + "</span>";
+                            }
+                        }
+                        $(arr[index].cells[i]).html(str);
+                    }
+                }
+            }
+        }
+
+        var clear = function() {
+            $("#table_signal tbody").find(".highlight").toggleClass("highlight");
+        }
+    });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <table id="table_signal" cellspacing="0" width="100%" class="row-border hover order-column">
+        <thead>
+            <tr>
+                {% for name in headers %}
+                    <th>{{ name }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                {% for name in headers %}
+                    <th>{{ name }}</th>
+                {% endfor %}
+            </tr>
+        </tfoot>
+        <tbody></tbody>
+    </table>
+{% endblock %}

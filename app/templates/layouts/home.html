@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Diff IR Signals">
+    <meta name="author" content="Harry Ha">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <title>Diff IR Signals</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='dist/css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='assets/css/customize.css') }}" rel="stylesheet">
+    {% block css %}
+    {% endblock %}
+  </head>
+
+  <body>
+
+    <div class="container">
+        {% include "layouts/navbar.html" %}
+      <!-- Main component for a primary marketing message or call to action -->
+      {% block body %}
+      {% endblock %}
+
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{{ url_for('static', filename='assets/js/jquery-3.0.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/ie10-viewport-bug-workaround.js') }}"></script>
+    {% block javascript %}
+
+    {% endblock %}
+  </body>
+</html>

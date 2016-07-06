@@ -1,0 +1,51 @@
+{% extends "layouts/home.html" %}
+{% block css%}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css"/>
+{% endblock %}
+{% block javascript %}
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        var table = $('#dataset').DataTable({
+            "bPaginate": true,
+            "bLengthChange": false,
+            "bFilter": true,
+            "bInfo": false,
+            "bAutoWidth": false
+        });
+
+        $(".delete").click(function(event) {
+            console.log($(this).attr("url"));
+        });
+
+    });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <table id="dataset" cellspacing="0" width="100%" class="row-border hover order-column">
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>File Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Number</th>
+                <th>File Name</th>
+                <th>Action</th>
+            </tr>
+        </tfoot>
+        <tbody>
+        {% for file in files %}
+            <tr>
+                <td>{{ file[0] }}</td>
+                <td>{{ file[1] }}</td>
+                <td><a href="{{ file[2] }}">View</a> <a href="#" class="delete" url="{{ file[3] }}">Delete</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

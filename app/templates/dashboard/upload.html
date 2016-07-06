@@ -1,0 +1,18 @@
+{% extends "layouts/home.html" %}
+{% block body %}
+<div class="jumbotron">
+    <div class="panel-body">
+
+          <!-- Standar Form -->
+          <h5>Select files from your computer</h5>
+          <form action="{{ url_for("dashboard.upload") }}" method="post" enctype="multipart/form-data">
+            <div class="form-inline">
+              <div class="form-group">
+                <input type="file" name="file" id="js-upload-files" multiple>
+              </div>
+              <button type="submit" class="btn btn-sm btn-primary">Upload files</button>
+            </div>
+          </form>
+        </div>
+</div>
+{% endblock %}
